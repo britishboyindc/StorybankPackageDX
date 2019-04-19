@@ -1,0 +1,11 @@
+{
+  "orgName": "Storybank_Master_DX",
+  "edition": "Developer",
+  "features": [],
+  "orgPreferences": {
+    "enabled": [],
+    "disabled": [
+      "S1EncryptedStoragePref2"
+    ]
+  }
+}

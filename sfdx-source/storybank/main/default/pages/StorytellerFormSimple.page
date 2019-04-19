@@ -1,0 +1,109 @@
+<apex:page id="storypagesimple" sidebar="false" cache="false" showheader="false" showChat="false" standardstylesheets="FALSE" controller="PublicStorybankSubmissionController" docType="html-5.0">
+
+<apex:stylesheet value="{!$Resource.public_stories_css}"/>
+
+<style>
+form {width: 570px}
+h3 {margin-top: 20px; margin-bottom: 10px}
+/* checkboxes come before the label */
+.longlabelcheckboxes .field-container {display: block; margin: 0 0 10px 0; float: left; clear: both}
+.longlabelcheckboxes .label-container {padding-left: 10px; width: 200; display: block; margin: 0 0 10px 0;}
+
+</style>
+
+<div style="text-align:left">
+
+<div id="underheader">
+<div class="text" >
+<h1 style="font-size: 2em">Our Storybank</h1>
+</div>
+</div>
+
+<div class="header-bar"> </div>
+
+<div class="main" role="main">
+<div class="story">
+
+<div class="intro">
+  <h1>Tell Us Your Story</h1>
+  
+  <p>One of the best ways for you to make an impact on the issues you care about is to share your story and talk about how you and your family are impacted by an issue or policy. Make your voice heard and take a few minutes to share your story here.</p>
+
+</div>
+
+    <apex:form id="storyform" >
+
+        <div class="theform">
+        <apex:inputHidden id="hiddenNextPage" value="{!sURL}"/>
+
+        <h3>Contact Information</h3>
+        <apex:panelGrid columns="2">
+        
+                <apex:outputLabel >First Name</apex:outputLabel>
+                <apex:inputField type="auto" required="TRUE" value="{!newws.First_Name__c}"/>
+                
+                <apex:outputLabel >Last Name</apex:outputLabel>
+                <apex:inputField type="auto" required="TRUE" value="{!newws.Last_Name__c}"/>
+                
+                <apex:outputLabel >Email Address</apex:outputLabel>
+                <apex:inputField type="email" required="TRUE" value="{!newws.Email_Address__c}"/>
+                
+                <apex:outputLabel >Phone Number</apex:outputLabel>
+                <apex:inputField type="auto" value="{!newws.Phone__c}"/>
+                
+            
+                <apex:outputLabel >Gender</apex:outputLabel>
+                <apex:inputField type="auto" required="false" value="{!newws.Gender__c}"/>
+                
+                <apex:outputLabel >Age Range</apex:outputLabel>
+                <apex:inputField type="auto" required="false" value="{!newws.Age_range__c}"/>
+                
+                <apex:outputLabel >Ethnicity</apex:outputLabel>
+                <apex:inputField type="auto" required="false" value="{!newws.Ethnicity__c}"/>
+               
+                <apex:outputLabel >Link to URL of your story</apex:outputLabel>
+                <apex:inputField type="url" value="{!newws.Video_URL__c}" label="If you have a video of your story - share it with us using a Youtube or Vimeo share link"/>
+                
+                <apex:outputLabel >Or tell us your story...</apex:outputLabel>
+                <apex:inputField style="width:400px" type="text" value="{!newws.Submitted_Story__c}" label="Describe your Story (300 words or less)"/>
+                </apex:panelGrid>
+                
+                <div class="longlabelcheckboxes">
+                <h4>What is your story about?</h4>
+                <apex:repeat value="{!publiccategories}" var="pc">
+                    <div class="field-row">
+                    <div class="field-container"><apex:inputCheckbox value="{!pc.bselected}"/></div>
+                    <div class="label-container"><apex:outputLabel >{!pc.sCategory}</apex:outputLabel></div>
+                    </div>
+                </apex:repeat>
+                </div>
+            
+                <h4>Agree to let us use your story and keep you in the loop</h4>
+                
+                <div class="longlabelcheckboxes">
+               <div class="field-row">
+                <div class="field-container"><apex:inputField value="{!newws.Agree_to_Terms_of_Use__c}"/></div>
+                <div class="label-container"><apex:outputLabel >I agree</apex:outputLabel></div>
+                </div>
+                </div>
+                   
+                <apex:commandButton value="Submit" action="{!submit}" style="font-size: 90%;"/>
+                     
+                </div>
+        
+
+    </apex:form>
+</div>
+        </div>
+        </div>
+
+
+    <script>
+        var hiddenid = '{!$Component.storyform.hiddenNextPage}';
+        document.getElementById(hiddenid).value = 'storybank__StorybankSubmissionConfirmation';
+    </script>
+
+
+
+
+</apex:page>

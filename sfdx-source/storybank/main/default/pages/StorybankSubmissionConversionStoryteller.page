@@ -1,0 +1,68 @@
+<apex:page standardController="Storybank_Submitted__c" extensions="StorybankSubmissionConversionController">
+
+<apex:sectionHeader title="Convert Web Submission - Storyteller"/>
+<apex:form >
+
+<apex:pageMessages />
+
+<!--These fields will not appear on the Storyteller Conversion page.-->
+<apex:outputPanel rendered="FALSE">
+<apex:outputField value="{!Storybank_Submitted__c.Name}"/>
+<apex:outputField value="{!Storybank_Submitted__c.Storybank_Name__c}"/>
+<apex:outputField value="{!Storybank_Submitted__c.RecordTypeId}"/>
+<apex:outputField value="{!Storybank_Submitted__c.Storyteller_Team_Source__c}"/>
+    <apex:repeat value="{!$ObjectType.Storybank_Submitted__c.FieldSets.Conversion}" var="f"> 
+        <apex:outputField value="{!Storybank_Submitted__c[f]}" />
+    </apex:repeat>
+    
+</apex:outputPanel>
+
+<apex:pageBlock title="Submitted Storyteller Information" rendered="{!bshowsubmitter}">
+
+<apex:pageBlockSection >
+   <apex:repeat value="{!$ObjectType.Storybank_Submitted__c.FieldSets.Submitted_Storyteller_Information}" var="ss"> 
+        <apex:outputField value="{!Storybank_Submitted__c[ss]}" />
+    </apex:repeat>
+
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+<apex:outputPanel rendered="{!IF(cons.size == 0,FALSE,TRUE)}">
+<apex:pageBlock title="Potential Storyteller Matches">
+<apex:pageBlockButtons location="top">
+<apex:commandButton action="{!createnewstorytellercontact}" value="Create New Contact"/>
+</apex:pageBlockButtons>
+<apex:pageBlockTable title="Matched Contacts" value="{!cons}" var="c">
+
+<apex:column headerValue="Select">
+<apex:commandlink value="Select" action="{!setselected}">
+<apex:param value="{!c.id}" name="cid"/>
+</apex:commandlink>
+</apex:column>
+   <apex:repeat value="{!$ObjectType.Contact.FieldSets.Storybank_Matches}" var="sm"> 
+    <apex:column value="{!c[sm]}" />
+    </apex:repeat>
+
+</apex:pageBlockTable>
+</apex:pageBlock>
+
+</apex:outputPanel>
+
+
+
+
+<apex:pageBlock title="Create New Storyteller Record" rendered="{!bshownewcontact}">
+<apex:pageBlockButtons location="top">
+<apex:commandButton action="{!createStoryTellerRecord}" value="Create Contact and Continue"/>
+</apex:pageBlockButtons>
+<apex:pageBlockSection rendered="{!bshownewcontact}" >
+  <apex:repeat value="{!StoryTellerFieldList}" var="sc"> 
+    <apex:inputField value="{!newContact[sc]}"/>
+    </apex:repeat>
+
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+</apex:form>
+
+</apex:page>

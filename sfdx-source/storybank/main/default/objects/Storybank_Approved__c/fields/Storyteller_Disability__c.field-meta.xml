@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Storyteller_Disability__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Storyteller&#39;s Disability status based on the Storyteller Contact Lookup field</description>
+    <externalId>false</externalId>
+    <formula>Storyteller__r.Disability__c</formula>
+    <label>Storyteller Disability</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

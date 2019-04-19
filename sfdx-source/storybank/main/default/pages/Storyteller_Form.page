@@ -1,0 +1,280 @@
+<apex:page id="storypage"  sidebar="False" showheader="false" standardstylesheets="false" controller="PublicStorybankSubmissionController">
+<apex:stylesheet value="{!$Resource.public_stories_css}"/>
+
+<style>
+
+form {width: 570px}
+.shortlabels, .longlabels .keycheckboxes .emphasizedcheckboxes {width: 100%; overflow: hidden; clear: both}
+
+.longlabels .label-container {width: 250; display: block; margin: 0; clear: both}
+.longlabels .field-container {width: 250; display: block; margin: 0 0 10px 0;}
+
+
+/* checkboxes come before the label */
+.longlabelcheckboxes .field-container {display: block; margin: 0 0 10px 0; float: left; clear: both}
+.longlabelcheckboxes .label-container {padding-left: 10px; width: 200; display: block; margin: 0 0 10px 0;}
+
+.shortlabels .label-container {margin: 0 10px 10px 0; width: 110px; display: block; float: left; clear: both; text-align: right;}
+.shortlabels .field-container {width: 250; display: block; margin: 0 0 10px 0; float: left; text-align: right}
+
+.emphasizedcheckboxes .field-container {margin: 0 10px 10px 0; display: block; float: left; clear: both}
+.emphasizedcheckboxes .label-container {width: 450px; display: block; margin: 0 0 10px 0; float: left;}
+
+h3 {margin-top: 20px; margin-bottom: 10px}
+
+</style>
+
+<script type="text/javascript">
+function fixNone() {
+  // hack first line of select lists
+  var options = document.getElementsByTagName("option");
+  for (var i = 0; i < options.length; i++) {
+    if (options[i].text == "--None--") {
+      options[i].text = "Please Select     ";
+    }
+  }
+}
+
+function fixId () {
+  // hack html id values of checkboxes
+  var idHackNamespace = "capjrb";
+  var j = 0; // counter for id
+  var inputFields = document.getElementsByTagName("input");
+  for (var i = 0; i < inputFields.length; i++) {
+    if (inputFields[i].id) {
+      continue;
+    } else {
+      var idString = idHackNamespace + j;
+      inputFields[i].setAttribute("id", idString);
+      j++;
+    }
+  }
+}
+
+function fixLabel() {
+  // make labels clickable
+  var labels = document.getElementsByTagName("label");
+  for (var i = 0; i < labels.length; i++) {
+
+// get id of gparent div
+    var p = labels[i].parentNode;
+    var gp = p.parentNode;
+    var cousinFieldId;
+    cousinFieldId = getCousinField(gp);
+    labels[i].setAttribute("for", cousinFieldId);
+  }
+}
+
+function getCousinField (n) {
+  var children = n.childNodes;
+  var s;
+  for (var i = 0; i < children.length; i++) {
+    if (children[i].nodeType == 1) {
+      if (children[i].tagName == "INPUT" ||
+          children[i].tagName == "SELECT" ||
+          children[i].tagName == "TEXTAREA") {
+          return(children[i].id);
+      } else {
+        s = getCousinField(children[i]);
+      }
+    }
+    if (s) {
+      return(s);
+    }
+
+  }
+}
+
+</script>
+
+<div style="text-align:left">
+
+    <div id="underheader">
+    
+        <div class="text" >
+            <h1 style="font-size: 2em">Our Storybank</h1>
+            <!-- uncomment the line below and insert your banner and a link to your homepage -->
+            <!--
+            <a href="http://example.com/" style="display: block; width: 800px;"><img src="http://example.com/images/log.png" style="position: relative; left: 240px; top: 50px" /></a>
+            -->
+        </div>
+    </div>
+
+    <div class="header-bar">
+    </div>
+
+    <div class="main" role="main">
+        
+        <div class="story">
+
+            <div class="intro">
+                  <h1>Tell Us Your Story</h1>
+  
+                  <p>One of the best ways for you to make an impact on the issues you care about is to share your story and talk about how you and your family are impacted by an issue or policy. Make your voice heard and take a few minutes to share your story here.</p>
+
+            </div>
+
+            <apex:form id="storyform">
+            <apex:inputHidden id="hiddenNextPage" value="{!sURL}"/>
+            <div>
+
+                <div class="storyteller">
+
+                    <div class="theform">
+
+                        <h3>Storyteller Information</h3>
+
+                            <div class="shortlabels">
+
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >* First Name</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField required="TRUE" style="font-size: 90%;" value="{!newws.First_Name__c}"/></div>
+                                </div>
+
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >* Last Name</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField required="TRUE" style="font-size: 90%;" value="{!newws.Last_Name__c}"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >* Email Address</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField required="TRUE" style="font-size: 90%;" value="{!newws.Email_Address__c}"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Phone</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField style="font-size: 90%;" value="{!newws.Phone__c}"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Zip</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField style="font-size: 90%;" styleclass="width-one-x offleft" value="{!newws.Postal_Code__c}"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Gender</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField value="{!newws.Gender__c}" style="font-size: 90%;"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Age</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField value="{!newws.Age_range__c}" style="font-size: 90%;"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Race/Ethnicity</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField value="{!newws.Ethnicity__c}" style="font-size: 90%;"/></div>
+                                </div>
+                                
+                            </div>
+
+                            <h3>Nominator Information</h3>
+
+                            <div class="shortlabels">
+
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >First Name</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField style="font-size: 90%;" value="{!newws.Nominator_First__c}"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Last Name</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField style="font-size: 90%;" value="{!newws.Nominator_Last_Name__c}"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Email</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField style="font-size: 90%;" value="{!newws.Nominator_Email_Address__c}"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Phone</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField style="font-size: 90%;" value="{!newws.Nominator_Phone__c}"/></div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Organization</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField style="font-size: 90%;" styleclass="width-one-x offleft" value="{!newws.Nominator_Organization__c}"/></div>
+                                </div>
+                                
+                            </div>
+
+                            <div class="longlabels">
+
+                            <h3>Story Information</h3>
+
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >If your story is in the form of a video, please share the <a href="http://youtube.com">YouTube</a> or <a href="http://vimeo.com/">Vimeo</a> link here.</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField style="font-size: 90%;" value="{!newws.Video_URL__c}"/><br/>
+                                    (2-3 minutes or less)</div>
+                                </div>
+                                
+                                <div class="field-row">
+                                    <div class="label-container"><apex:outputLabel >Your Story</apex:outputLabel></div>
+                                    <div class="field-container"><apex:inputField style="width:400px;height:100px;font-size: 90%;" value="{!newws.Submitted_Story__c}"/><br/>
+                                    (300 words or less)</div>
+                                </div>
+                            
+                            </div>
+
+                            <div class="longlabelcheckboxes">
+
+                                
+                                What is the Story about?
+                                <br/><br/>
+                                
+                                <apex:repeat value="{!publiccategories}" var="pc">
+                                
+                                <div class="field-row">
+                                    <div class="field-container"><apex:inputCheckbox value="{!pc.bselected}"/></div>
+                                    <div class="label-container"><apex:outputLabel >{!pc.sCategory}</apex:outputLabel></div>
+                                </div>
+                                
+                                </apex:repeat>
+                                
+                            </div>
+    
+                            <h3>Do you agree to let us publish this story?</h3>
+
+                            <div class="emphasizedcheckboxes">
+                            
+                            <div class="field-row">
+                                <div class="field-container"><apex:inputField value="{!newws.Agree_to_Terms_of_Use__c}"/></div>
+                            <div class="label-container"><apex:outputLabel >I agree</apex:outputLabel></div>
+                            
+                            </div>
+
+
+                </div>
+
+                            <div class="longlabels">
+
+                                <div class="field-row">
+                                    <div class="label-container"></div>
+                                    <div class="field-container"><apex:commandButton value="Submit" action="{!submit}" style="font-size: 90%;"/></div>
+                                </div>
+
+                            </div>
+
+
+</div>
+</div>
+</div>
+</apex:form>
+
+
+
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+fixId();
+fixNone();
+fixLabel();
+var hiddenid = '{!$Component.storyform.hiddenNextPage}';
+document.getElementById(hiddenid).value = 'storybank__StorybankSubmissionConfirmation';
+
+</script>
+
+</apex:page>

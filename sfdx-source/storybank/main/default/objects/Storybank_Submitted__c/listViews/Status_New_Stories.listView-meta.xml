@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status_New_Stories</fullName>
+    <columns>NAME</columns>
+    <columns>Submitted_Date__c</columns>
+    <columns>Category__c</columns>
+    <columns>First_Name__c</columns>
+    <columns>Last_Name__c</columns>
+    <columns>Email_Address__c</columns>
+    <columns>Phone__c</columns>
+    <columns>State_pick__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>New</value>
+    </filters>
+    <label>Status - New Stories</label>
+</ListView>

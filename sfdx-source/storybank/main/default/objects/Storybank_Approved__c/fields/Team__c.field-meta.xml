@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Team__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Storybank Team&#39;s name to track source of the story. The value should originally be set by a workflow when the public form is submitted. It is copied to the Storybank record via the Field Set.</description>
+    <externalId>false</externalId>
+    <label>Team</label>
+    <length>40</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,50 @@
+<apex:page standardController="Storybank_Submitted__c" extensions="StorybankSubmissionConversionController">
+<apex:sectionHeader title="Convert Submitted Story - Nominator"/>
+<apex:form >
+
+<apex:pageMessages />
+
+<apex:pageBlock title="Submitted Nominator Information">
+
+<apex:pageBlockSection >
+     <apex:repeat value="{!$ObjectType.Storybank_Submitted__c.FieldSets.Nominator_Fields_for_Conversion}" var="nfc"> 
+    <apex:outputField value="{!Storybank_Submitted__c[nfc]}"/>
+    </apex:repeat>
+
+        
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+<apex:outputPanel rendered="{!IF(cons.size == 0,FALSE,TRUE)}">
+<apex:pageBlock title="Potential Nominator Matches">
+<apex:pageBlockButtons location="top">
+<apex:commandButton action="{!createnewnominatorcontact}" value="Create New Contact"/>
+</apex:pageBlockButtons>
+<apex:pageBlockTable title="Matched Contacts" value="{!cons}" var="c">
+
+<apex:column headerValue="Select">
+<apex:commandlink value="Select" action="{!setSelectedNominator}">
+<apex:param value="{!c.id}" name="cid"/>
+</apex:commandlink>
+</apex:column>
+    <apex:repeat value="{!$ObjectType.Contact.FieldSets.Storybank_Matches}" var="sm"> 
+    <apex:column value="{!c[sm]}" />
+    </apex:repeat>
+</apex:pageBlockTable>
+</apex:pageBlock>
+
+</apex:outputPanel>
+
+<apex:pageBlock title="Create New Nominator Record" rendered="{!bshownewcontact}">
+<apex:pageBlockButtons location="top">
+<apex:commandButton action="{!submitnewnominatorcontact}" value="Create Contact and Finish"/>
+</apex:pageBlockButtons>
+    <apex:pageBlockSection rendered="{!bshownewcontact}" >
+    <apex:repeat value="{!NominatorFieldList}" var="sc"> 
+    <apex:inputField value="{!newContact[sc]}"/>
+    </apex:repeat>
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+</apex:form>
+</apex:page>

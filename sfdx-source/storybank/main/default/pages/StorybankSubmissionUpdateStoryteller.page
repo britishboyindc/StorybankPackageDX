@@ -1,0 +1,44 @@
+<apex:page standardController="Storybank_Submitted__c" extensions="StorybankSubmissionConversionController">
+
+<apex:sectionHeader title="Update Storyteller Information"/>
+<apex:form >
+
+
+<apex:pageMessages />
+
+<apex:pageBlock id="conupdates" title="Submitted Storyteller Information">
+<apex:pageBlockButtons >
+<apex:commandButton action="{!createStoryTellerRecord}" value="Update Contact and Continue"/>
+</apex:pageBlockButtons>
+
+<apex:pageBlockTable value="{!contactFieldUpdates}" var="cuw" columnsWidth="15%,35%,15%,35%">
+<apex:column headerValue="Contact Field">
+<apex:outputLabel value="{!cuw.sFieldLabel}"/>
+</apex:column>
+
+<apex:column headerValue="Submitted Data">
+<apex:inputField value="{!Storybank_Submitted__c[cuw.sSubmissionField]}"/>
+</apex:column>
+
+<apex:column headerValue="Action">
+<apex:selectList size="1" value="{!cuw.sAction}">
+<apex:selectOptions value="{!cuw.sActions}"/>
+</apex:selectList>
+
+</apex:column>
+
+<apex:column headerValue="Currrent Contact Data">
+<apex:outputField value="{!newContact[cuw.sContactField]}"/>
+</apex:column>    
+</apex:pageBlockTable>
+
+
+</apex:pageBlock>
+
+
+
+</apex:form>
+
+
+
+</apex:page>

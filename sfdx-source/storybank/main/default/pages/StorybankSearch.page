@@ -1,0 +1,155 @@
+<apex:page sidebar="False" showheader="false" standardstylesheets="false" controller="Storybank_Queries">
+<!--<apex:stylesheet value="{!$Resource.jrb_public_stories_css}"/-->
+
+<script type="text/javascript" src="https://ajax.microsoft.com/ajax/jquery/jquery-1.7.1.min.js"/>
+
+<apex:stylesheet value="{!$Resource.public_stories_css}"/>
+
+<script>
+j$ = jQuery.noConflict();
+
+j$(document).ready(function() {
+      showCategories();
+      var sCategory = 'Categories';
+      var sCategoryPrevious = 'Categories';
+      
+       });
+</script>
+
+<div style="text-align:left">
+
+<div id="underheader">
+<div class="text" >
+<h1 style="font-size: 2em">Our Storybank</h1>
+</div>
+</div>
+
+<div id="headerbar" class="header-bar">
+</div>
+
+<div class="main" role="main">
+<div id = "categories" class="story">
+
+<p><b>Please choose a category.</b></p>
+
+
+<apex:repeat value="{!categories}" var="scat">
+
+<div class="field-row">
+<p><a href="javascript:void(0);" onclick="getStoriesforCategory('{!scat}');">{!scat}</a></p>
+</div>
+
+</apex:repeat>
+
+</div>
+</div>
+
+<div id="categoryresults">
+<p><a href="javascript:void(0);" onclick="showCategories();">Back</a></p>
+<div id="searchResults"></div>
+</div>
+
+<div id="storydetail">
+<p><a href="javascript:void(0);" onclick="showCategoryResults();">Back</a></p>
+<div id="storydetails"></div>
+</div>
+
+</div>
+
+
+
+<script>
+
+function getStoriesforCategory (sCat) {
+
+ // clear previous results, if any
+              j$("#searchResults").html('');
+              
+              Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.Storybank_Queries.getStoriesbyCategory}',
+                    sCat, 
+                    function(result, event){          
+            
+                        if (event.status && event.result) {  
+                              j$.each(event.result, function () { 
+                              console.log(event.result);               
+                                                           
+                              j$("#searchResults").append('<a href="javascript:void(0);" onclick="getStoriesDetails(\'' + this.Id + '\');">' + this.Name + '</a>');
+                              j$("#searchResults").append(this.Story_Summary__c + "<br/>");
+                             }
+                        
+                    );
+                     ;
+                      sCategory = sCat;
+                      sCategoryPrevious = sCat;
+                      showCategoryResults();
+                     
+                                 
+                    } else {
+                       alert(event.message);
+                    }
+                }, {escape:true});
+                }
+
+function getStoriesDetails (sId) {
+
+ // clear previous results, if any
+              j$("#storydetails").html('');
+              console.log(sId);
+              
+              Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.Storybank_Queries.getStoryDetail}',
+                    sId, 
+                    function(result, event){          
+            
+                        if (event.status) {  
+                              console.log(result); 
+                              j$("#storydetails").append(result.Name + "<br/>");
+                              j$("#storydetails").append(result.Story_Summary__c + "<br/>");
+                              j$("#storydetails").append(result.Final_Copy__c + "<br/>");
+                              j$("#storydetails").append(result.Video_URL__c + "<br/>");       
+                             
+                             sCategoryPrevious = sCategory;
+                             sCategory = result.Name;
+                             showStoryDetails();
+                     
+                    
+                                 
+                    } else {
+                       alert(event.message);
+                    }
+                }, {escape:true});
+                }
+
+
+function showCategories () {
+j$("#categoryresults").hide();
+j$("#storydetail").hide();
+j$("#categories").show();
+sCategory = 'Categories';
+SetHeaderBar();
+}
+
+function showCategoryResults () {
+j$("#categoryresults").show();
+j$("#storydetail").hide();
+j$("#categories").hide();
+sCategory = sCategoryPrevious;
+SetHeaderBar();
+}
+
+function showStoryDetails () {
+j$("#categoryresults").hide();
+j$("#storydetail").show();
+SetHeaderBar();
+}
+
+function SetHeaderBar () {
+j$("#headerbar").html(sCategory);
+}
+
+
+</script>
+
+
+</apex:page>

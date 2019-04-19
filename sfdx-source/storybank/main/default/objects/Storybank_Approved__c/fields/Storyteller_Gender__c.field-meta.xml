@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Storyteller_Gender__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Storyteller&#39;s Gender based on the Storyteller Contact Lookup field</description>
+    <externalId>false</externalId>
+    <formula>TEXT( Storyteller__r.Gender__c )</formula>
+    <label>Storyteller Gender</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

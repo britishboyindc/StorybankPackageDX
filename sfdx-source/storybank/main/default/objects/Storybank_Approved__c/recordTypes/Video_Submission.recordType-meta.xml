@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Video_Submission</fullName>
+    <active>true</active>
+    <description>For stories submitted with link to Video</description>
+    <label>Video Submission</label>
+    <picklistValues>
+        <picklist>Category__c</picklist>
+        <values>
+            <fullName>Child Care</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Education</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Health</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Housing and Utilities</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Jobs%2FTraining</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutrition Assistance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other %28Please Specify%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tax Credits</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>How_did_you_hear_about_us__c</picklist>
+        <values>
+            <fullName>Facebook%2FTwitter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Family</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Friend</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Search</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other Internet Search</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Internal_Categories__c</picklist>
+        <values>
+            <fullName>Creating Good Jobs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cutting Poverty in Half</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Promoting Economic Security</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Strengthening Families</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

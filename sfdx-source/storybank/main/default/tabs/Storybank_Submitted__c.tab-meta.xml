@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <icon>Logos_and_Graphics/Tab_Icon_Book_Open.png</icon>
+    <mobileReady>false</mobileReady>
+    <motif>Custom228: TV Widescreen</motif>
+</CustomTab>

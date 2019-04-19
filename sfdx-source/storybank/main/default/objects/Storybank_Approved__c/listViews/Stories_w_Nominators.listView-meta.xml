@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stories_w_Nominators</fullName>
+    <columns>NAME</columns>
+    <columns>Storybank_Name__c</columns>
+    <columns>Storyteller__c</columns>
+    <columns>Submitter__c</columns>
+    <columns>Category__c</columns>
+    <columns>Video_URL__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Submitter__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <label>Stories w/ Nominators</label>
+</ListView>

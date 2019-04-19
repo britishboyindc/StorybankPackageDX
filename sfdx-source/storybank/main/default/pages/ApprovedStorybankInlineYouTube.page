@@ -1,0 +1,5 @@
+<apex:page standardController="Storybank_Approved__c">
+<div style="text-align:center">
+<apex:iframe width="640" height="385" src="{!Storybank_Approved__c.Embed_URL__c}"/>
+</div>
+</apex:page>

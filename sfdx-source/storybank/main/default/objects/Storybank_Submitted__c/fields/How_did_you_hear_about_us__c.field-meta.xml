@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>How_did_you_hear_about_us__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <label>How did you hear about us?</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Family/friend</fullName>
+                <default>false</default>
+                <label>Family/friend</label>
+            </value>
+            <value>
+                <fullName>Professional network</fullName>
+                <default>false</default>
+                <label>Professional network</label>
+            </value>
+            <value>
+                <fullName>Internet search</fullName>
+                <default>false</default>
+                <label>Internet search</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

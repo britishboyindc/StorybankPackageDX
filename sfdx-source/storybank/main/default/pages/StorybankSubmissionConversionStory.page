@@ -1,0 +1,34 @@
+<apex:page standardController="Storybank_Submitted__c" extensions="StorybankSubmissionConversionController">
+<apex:sectionHeader title="Convert Web Submission"/>
+
+<apex:form >
+<apex:pageBlock title="Original Submission">
+<apex:pageBlockSection >
+<apex:outputField value="{!Storybank_Submitted__c.Name}"/>
+<apex:outputField value="{!Storybank_Submitted__c.Storybank_Name__c}"/>
+
+    <apex:repeat value="{!$ObjectType.Storybank_Submitted__c.FieldSets.Conversion}" var="f"> 
+        <apex:outputField value="{!Storybank_Submitted__c[f]}" />
+    </apex:repeat>
+
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+<apex:pageBlock title="Reviewed Submission">
+<apex:pageBlockButtons location="top">
+<apex:commandButton action="{!convertsubmission}" value="Create Reviewed Record"/>
+</apex:pageBlockButtons>
+<apex:pageBlockSection >
+<apex:inputField required="TRUE" value="{!rs.Name}"/>
+
+    <apex:repeat value="{!$ObjectType.Storybank_Approved__c.FieldSets.Conversion}" var="r"> 
+        <apex:inputField value="{!rs[r]}" />
+    </apex:repeat>
+
+<apex:outputField value="{!rs.Storyteller__c}" />
+
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+</apex:form>
+</apex:page>

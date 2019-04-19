@@ -1,0 +1,25 @@
+<apex:page sidebar="False" showheader="false" standardstylesheets="false" controller="PublicStorybankSubmissionController">
+<apex:stylesheet value="{!$Resource.public_stories_css}"/>
+
+<div style="text-align:left">
+
+
+
+<div id="underheader">
+<div class="text" >
+<h1 style="font-size: 2em">Our Storybank</h1>
+</div>
+</div>
+
+<div class="header-bar"> </div>
+
+<div class="main" role="main">
+<div class="story">
+
+<p>this is where the body content goes</p>
+
+</div>
+</div>
+</div>
+
+</apex:page>

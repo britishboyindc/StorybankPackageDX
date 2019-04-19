@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Nominated_Stories</fullName>
+    <columns>NAME</columns>
+    <columns>Submitted_Date__c</columns>
+    <columns>Category__c</columns>
+    <columns>First_Name__c</columns>
+    <columns>Last_Name__c</columns>
+    <columns>Email_Address__c</columns>
+    <columns>Phone__c</columns>
+    <columns>State_pick__c</columns>
+    <columns>Nominator_Email_Address__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Nominator_First__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <filters>
+        <field>Nominator_Last_Name__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <filters>
+        <field>Nominator_Email_Address__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <label>Nominated Stories</label>
+</ListView>

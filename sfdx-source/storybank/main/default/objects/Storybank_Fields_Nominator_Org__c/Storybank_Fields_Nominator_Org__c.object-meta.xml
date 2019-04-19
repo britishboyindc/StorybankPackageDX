@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Used during the Storybank - Convert Submission process to INSERT/UPDATE an ACCOUNT record based on the data that was captured on the Storybank - Submitted object. This setting MAPS Storybank - Submitted fields to Account fields when nominator information is populated on a Storybank - Submitted record.</description>
+    <enableFeeds>false</enableFeeds>
+    <label>Storybank Map Nominator Org to Account</label>
+    <visibility>Public</visibility>
+</CustomObject>

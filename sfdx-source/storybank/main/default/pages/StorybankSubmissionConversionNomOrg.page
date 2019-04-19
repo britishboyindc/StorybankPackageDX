@@ -1,0 +1,47 @@
+<apex:page standardController="Storybank_Submitted__c" extensions="StorybankSubmissionConversionController">
+<apex:sectionHeader title="Convert Web Submission - Nominator's Organization"/>
+<apex:form >
+
+<apex:pageMessages />
+
+<apex:pageBlock title="Submitted Nominator Organization Information">
+<apex:pageBlockSection >
+<apex:repeat value="{!$ObjectType.Storybank_Submitted__c.FieldSets.Nominator_Org_Fields_for_Submission}" var="no"> 
+        <apex:outputField value="{!Storybank_Submitted__c[no]}" />
+    </apex:repeat>
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+<apex:outputPanel rendered="{!IF(accts.size == 0,FALSE,TRUE)}">
+<apex:pageBlock title="Potential Account Matches">
+<apex:pageBlockButtons location="top">
+<apex:commandButton action="{!createnewaccount}" value="Create New Account"/>
+</apex:pageBlockButtons>
+
+<apex:pageBlockTable title="Matched Accounts" value="{!accts}" var="a" >
+<apex:column headerValue="Select">
+<apex:commandlink value="Select" action="{!setselectedaccount}">
+<apex:param value="{!a.id}" name="aid"/>
+</apex:commandlink>
+</apex:column>
+<apex:repeat value="{!$ObjectType.Account.FieldSets.Storybank_Nominating_Organization}" var="nar"> 
+        <apex:column value="{!a[nar]}" />
+</apex:repeat>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:outputPanel>
+
+
+<apex:pageBlock title="Create New Organization Record" rendered="{!bshowsubmitteraccount}">
+<apex:pageBlockButtons location="top">
+<apex:commandButton action="{!submitnewaccount}" value="Create Account and Continue"/>
+</apex:pageBlockButtons>
+<apex:pageBlockSection >
+  <apex:repeat value="{!AccountFieldMap}" var="nanew"> 
+        <apex:inputField value="{!na[nanew]}" />
+</apex:repeat>
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+</apex:form>
+</apex:page>
