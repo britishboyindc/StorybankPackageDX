@@ -1,0 +1,69 @@
+<template>
+    <template if:true={isTableVisible}>
+        <lightning-card title="Update Storyteller Information">
+            <h3 class="slds-section-title--divider">Submitted Storyteller Information</h3>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Opportunity Name">Contact Field</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Account Name">Submitted Data</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Close Date">Action</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Stage">Currrent Contact Data</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody for:each={wrapper} for:item='item' key={key}>
+                    <tr class="slds-hint-parent" key={key}>
+                        <td data-label="Account Name">
+                            <div class="slds-truncate">{item.contactLabelField}</div>
+                        </td>
+                        <td class="hide-label">
+                            <lightning-record-edit-form record-id={storybanksubmittedid}
+                                object-api-name="storybank__Storybank_Submitted__c">
+                                <lightning-input-field field-name={item.submittedDataField} onchange={onInputChange}
+                                    title={item.submittedDataField} variant="label-hidden">
+                                </lightning-input-field>
+                            </lightning-record-edit-form>
+                        </td>
+                        <td class="hide-label2">
+                            <lightning-combobox name={item.submittedDataField} label="label" placeholder="Select action"
+                                options={item.action} value={item.selectedAction} onchange={onAction}>
+                            </lightning-combobox>
+                        </td>
+                        <td>
+                            <div class="slds-truncate">
+                                <lightning-record-view-form record-id={contactid} object-api-name="Contact" key={key}>
+                                    <lightning-output-field field-name={item.currentContactField}
+                                        variant="label-hidden">
+                                    </lightning-output-field>
+                                </lightning-record-view-form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="slds-button slds-button_brand slds-align_absolute-center"
+                onclick={onUpdateContactAndContinue} style="margin-top: 1rem;">Update Contact And
+                Continue</button>
+        </lightning-card>
+    </template>
+    <template if:true={isConversionNominator}>
+        <c-storybank-Submission-Conversion-Nominator nominatoremail={nominatoremail}
+            submittedrecid={storybanksubmittedid} storytellerid={contact.Id}>
+        </c-storybank-Submission-Conversion-Nominator>
+    </template>
+
+    <template if:true={isCreateNominatorOrg}>
+        <c-storybank-Submission-Conversion-Nom-Org nominatoremail={nominatoremail} submittedrecid={storybanksubmittedid}
+            storytellerid={contactid} nominatororgname={nominatororgname}>
+        </c-storybank-Submission-Conversion-Nom-Org>
+    </template>
+
+</template>

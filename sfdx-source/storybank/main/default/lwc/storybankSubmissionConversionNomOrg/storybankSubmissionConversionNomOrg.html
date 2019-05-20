@@ -1,0 +1,104 @@
+<template>
+  <template if:true={isCurrentComponent}>
+    <lightning-card title="Convert Web Submission - Nominator's Organization">
+      <h3 class="slds-section-title--divider">Submitted Nominator Organization Information</h3>
+      <div class="slds-form--stacked slds-p-around--medium slds-m-bottom-/-x-small">
+        <lightning-record-form record-id={submittedrecid} object-api-name="storybank__Storybank_Submitted__c"
+          fields={fieldsForConversion} columns="2" mode="readonly">
+        </lightning-record-form>
+      </div>
+      <template if:true={isCreateOrgVisible}>
+        <h3 class="slds-section-title--divider">Create New Organization Record</h3>
+        <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+          <lightning-record-edit-form object-api-name="Account">
+            <div class="slds-grid slds-gutters">
+              <div class="slds-col">
+                <lightning-input-field field-name="Name" onchange={handleChange} title="currentOrg-Name"
+                  value={currentOrg.Name}>
+                </lightning-input-field>
+                <lightning-input-field field-name="BillingCity" onchange={handleChange} title="currentOrg-BillingCity"
+                  value={currentOrg.BillingCity}>
+                </lightning-input-field>
+                <lightning-input-field field-name="BillingPostalCode" onchange={handleChange}
+                  title="currentOrg-BillingPostalCode" value={currentOrg.BillingPostalCode}>
+                </lightning-input-field>
+              </div>
+              <div class="slds-col">
+                <lightning-input-field field-name="Phone" onchange={handleChange} title="currentOrg-Phone"
+                  value={currentOrg.Phone}>
+                </lightning-input-field>
+                <lightning-input-field field-name="BillingState" onchange={handleChange} title="currentOrg-BillingState"
+                  value={currentOrg.BillingState}>
+                </lightning-input-field>
+              </div>
+            </div>
+          </lightning-record-edit-form>
+          <button class="slds-button slds-button_brand slds-align_absolute-center" onclick={handleCreate}>Create Account
+            and
+            Continue</button>
+        </div>
+      </template>
+
+      <template if:true={isTableVisible}>
+        <h3 class="slds-section-title--divider">Potential Account Matches</h3>
+        <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+          <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead>
+              <tr class="slds-line-height_reset">
+                <th class="" scope="col">
+                  <div class="slds-truncate">Select</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate">Account Name</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate">Phone</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate">Billing City</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate">Billing State/Province</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate">Billing Zip/Postal Code</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="slds-hint-parent" for:each={existedOrganizations} for:item='row' key={id}>
+                <th data-label="Opportunity Name" scope="row">
+                  <div class="slds-truncate"><a href="javascript:void(0);" tabindex="-1" name={row.Id}
+                      onclick={onSelectClick}>Select</a></div>
+                </th>
+                <td data-label="First Name">
+                  <div class="slds-truncate">{row.Name}</div>
+                </td>
+                <td data-label="Close Date">
+                  <div class="slds-truncate">{row.Phone}</div>
+                </td>
+                <td data-label="Prospecting">
+                  <div class="slds-truncate">{row.BillingCity}</div>
+                </td>
+                <td data-label="Confidence">
+                  <div class="slds-truncate">{row.BillingState}</div>
+                </td>
+                <td data-label="Amount">
+                  <div class="slds-truncate">{row.BillingPostalCode}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="slds-button slds-button_brand slds-align_absolute-center" onclick={changeBoolean}
+            style="margin-top: 1rem;">Create New Account</button>
+        </div>
+      </template>
+    </lightning-card>
+  </template>
+
+  <template if:true={isCreateNominatorPage}>
+    <c-storybank-Submission-Conversion-Nominator nominatoremail={nominatoremail} submittedrecid={submittedrecid}
+      storytellerid={storytellerid} nominatororgid={nominatororgid}></c-storybank-Submission-Conversion-Nominator>
+  </template>
+
+</template>
