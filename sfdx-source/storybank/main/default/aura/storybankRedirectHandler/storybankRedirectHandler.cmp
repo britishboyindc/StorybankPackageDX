@@ -1,0 +1,35 @@
+<aura:component
+    implements="flexipage:availableForAllPageTypes,lightning:isUrlAddressable,lightning:actionOverride,force:hasRecordId,force:hasSObjectName,force:lightningQuickAction"
+    access="global">
+    <aura:html tag="style">
+        td.hide-label lightning-helptext {
+        display: none;
+        }
+        td.hide-label label.slds-form-element__label{
+        display: none;
+        }
+        td.hide-label label.slds-checkbox__label{
+        display: none;
+        }
+        td.hide-label input, textarea{
+        margin-top: 0.5rem;
+        }
+        td.hide-label2 label.slds-form-element__label {
+        display: none;
+        }
+        .datatable button.slds-button.slds-button_neutral {
+        border: unset;
+        background: unset;
+        }
+        .datatable button.slds-button.slds-button_neutral:hover {
+        text-decoration: underline;
+        }
+        .datatable lightning-button-menu {
+        display: none;
+        }
+    </aura:html>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.onPageReferenceChanged}" />
+    <c:storybankSubmissionConversionStoryteller />
+</aura:component>

@@ -1,0 +1,49 @@
+<template>
+    <template if:true={isCurrentComponent}>
+        <lightning-card title="Convert Submitted Story - Nominator">
+            <h3 class="slds-section-title--divider">SUBMITTED NOMINATOR INFORMATION</h3>
+            <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                <lightning-record-form record-id={submittedrecid} object-api-name="storybank__Storybank_Submitted__c"
+                    fields={fieldsForConversion} columns="2" mode="readonly">
+                </lightning-record-form>
+            </div>
+            <template if:true={isCreateNominatorVisible}>
+                <h3 class="slds-section-title--divider">Create New Nominator Record</h3>
+                <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                    <lightning-record-edit-form object-api-name="Contact">
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="around-small" for:each={currentNominatorWrapper}
+                                for:item="item" key={key}>
+                                <lightning-input-field field-name={item.fieldAPI} onchange={handleChange}
+                                    title={item.title} value={item.value}></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-record-edit-form>
+                    <button class="slds-button slds-button_brand slds-align_absolute-center"
+                        onclick={handleCreate}>Create Contact and
+                        Finish</button>
+                </div>
+            </template>
+
+            <template if:true={isTableVisible}>
+                <h3 class="slds-section-title--divider">Potential Storyteller Matches</h3>
+                <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                    <lightning-datatable class="datatable" key-field="Id" data={existedNominators} columns={columns}
+                        hide-checkbox-column onrowaction={rowAction}>
+                    </lightning-datatable>
+                    <button class="slds-button slds-button_brand slds-align_absolute-center" onclick={changeBoolean}
+                        style="margin-top: 1rem;">Create New Contact</button>
+                </div>
+            </template>
+        </lightning-card>
+    </template>
+
+    <template if:true={isUpdateNominatorComponent}>
+        <lightning-card title="Update Nominator Information">
+            <c-storybank-Submission-Update-Nominator storytellerid={storytellerid} submittedrecid={submittedrecid}
+                nominatorid={selectedNominatorId} nominatororgid={nominatororgid}>
+            </c-storybank-Submission-Update-Nominator>
+        </lightning-card>
+    </template>
+
+</template>

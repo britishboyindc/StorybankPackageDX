@@ -1,0 +1,47 @@
+<template>
+  <template if:true={isCurrentComponent}>
+    <lightning-card title="Convert Web Submission - Nominator's Organization">
+      <h3 class="slds-section-title--divider">Submitted Nominator Organization Information</h3>
+      <div class="slds-form--stacked slds-p-around--medium slds-m-bottom-/-x-small">
+        <lightning-record-form record-id={submittedrecid} object-api-name="storybank__Storybank_Submitted__c"
+          fields={fieldsForConversion} columns="2" mode="readonly">
+        </lightning-record-form>
+      </div>
+
+      <template if:true={isCreateOrgVisible}>
+        <h3 class="slds-section-title--divider">Create New Organization Record</h3>
+        <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+          <lightning-record-edit-form object-api-name="Account">
+            <lightning-layout multiple-rows>
+              <lightning-layout-item size="6" padding="around-small" for:each={currentOrgWrapper} for:item="item"
+                key={key}>
+                <lightning-input-field field-name={item.fieldAPI} onchange={handleChange} title={item.title}
+                  value={item.value}></lightning-input-field>
+              </lightning-layout-item>
+            </lightning-layout>
+          </lightning-record-edit-form>
+          <button class="slds-button slds-button_brand slds-align_absolute-center" onclick={handleCreate}>Create Account
+            and
+            Continue</button>
+        </div>
+      </template>
+
+      <template if:true={isTableVisible}>
+        <h3 class="slds-section-title--divider">Potential Account Matches</h3>
+        <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+          <lightning-datatable class="datatable" key-field="Id" data={existedOrganizations} columns={columns}
+            hide-checkbox-column onrowaction={rowAction}>
+          </lightning-datatable>
+          <button class="slds-button slds-button_brand slds-align_absolute-center" onclick={changeBoolean}
+            style="margin-top: 1rem;">Create New Account</button>
+        </div>
+      </template>
+    </lightning-card>
+  </template>
+
+  <template if:true={isCreateNominatorPage}>
+    <c-storybank-Submission-Conversion-Nominator nominatoremail={nominatoremail} submittedrecid={submittedrecid}
+      storytellerid={storytellerid} nominatororgid={nominatororgid}></c-storybank-Submission-Conversion-Nominator>
+  </template>
+
+</template>
