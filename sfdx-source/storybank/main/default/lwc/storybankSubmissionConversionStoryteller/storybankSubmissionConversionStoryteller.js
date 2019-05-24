@@ -6,6 +6,7 @@ import getRecord from '@salesforce/apex/lwcUtils.getRecord';
 import getContact from '@salesforce/apex/lwcUtils.getContact';
 import createNewStoryApproved from '@salesforce/apex/lwcUtils.createNewStoryApproved';
 import fieldsForConversion from '@salesforce/apex/lwcUtils.fieldsForConversion';
+import getMatches from '@salesforce/apex/lwcUtils.getMatches';
 import { NavigationMixin } from 'lightning/navigation';
 
 export default class StorybankSubmissionConversionStoryteller extends NavigationMixin(LightningElement) {
@@ -19,6 +20,7 @@ export default class StorybankSubmissionConversionStoryteller extends Navigation
     @track nominatorEmail = '';
     @track fieldsForConversion;
     @track contact;
+    @track contactWrapper = [];
     contact = {
         FirstName: '',
         LastName: '',
@@ -32,6 +34,7 @@ export default class StorybankSubmissionConversionStoryteller extends Navigation
     @track createdContact;
     @track nominatorOrgName = '';
     @track isCreateOrganizationPage = false;
+    @track columns = [];
     connectedCallback() {
         this.getQueryVariable()
     }
@@ -55,50 +58,78 @@ export default class StorybankSubmissionConversionStoryteller extends Navigation
             }
         }
         fieldsForConversion({ context: 'storyteller' })
-        .then(resultFields => {
-            this.fieldsForConversion = resultFields;
-        });
-
+            .then(resultFields => {
+                this.fieldsForConversion = resultFields;
+            })
         getRecord({
             Id: this.recordId
         })
-        .then(result => {
-            this.obj = result;
-            if (result.storybank__Nominator_Email_Address__c != null) {
-                this.nominatorEmail = result.storybank__Nominator_Email_Address__c;
-            }
-            if (result.storybank__Nominator_Organization__c != null) {
-                this.nominatorOrgName = result.storybank__Nominator_Organization__c;
-            }
-            fillWrapper({ context: 'Storyteller' })
-            .then(wrapper => {
-                for (let i = 0; i < wrapper.length; i++) {
-                    this.contact[wrapper[i].currentContactField] = (this.obj[wrapper[i].submittedDataField] == null) ? '' : this.obj[wrapper[i].submittedDataField];
+            .then(result => {
+                this.obj = result;
+                if (result.storybank__Nominator_Email_Address__c != null) {
+                    this.nominatorEmail = result.storybank__Nominator_Email_Address__c;
                 }
-                getContact({
-                    field: 'Email',
-                    value: this.contact.Email
-                })
-                .then(exContResult => {
-                    if (exContResult.length != 0) {
-                        this.isCurrentComponent = true;
-                        this.isTableVisible = true;
-                        this.isCreateContactVisible = false;
-                    } else {
-                        this.isCurrentComponent = true;
-                        this.isTableVisible = false;
-                        this.isCreateContactVisible = true;
-                    }
-                    this.exContResult = exContResult;
-                })
-                .catch(error => {
-                    this.error = error;
-                });
+                if (result.storybank__Nominator_Organization__c != null) {
+                    this.nominatorOrgName = result.storybank__Nominator_Organization__c;
+                }
+                fillWrapper({ context: 'Storyteller' })
+                    .then(wrapper => {
+                        let contwrapper = [];
+                        for (let i = 0; i < wrapper.length; i++) {
+                            let value = (this.obj[wrapper[i].submittedDataField] == null) ? '' : this.obj[wrapper[i].submittedDataField];
+                            let title = 'contact-' + wrapper[i].currentContactField;
+                            this.contact[wrapper[i].currentContactField] = value;
+                            contwrapper.push({
+                                fieldAPI: wrapper[i].currentContactField,
+                                value: value,
+                                title: title
+                            });
+                        }
+                        this.contactWrapper = [...contwrapper];
+                        getContact({
+                            field: 'Email',
+                            value: this.contact.Email
+                        })
+                            .then(exContResult => {
+                                if (exContResult.length != 0) {
+                                    getMatches({ fieldSetName: 'storybank__Storybank_Matches', ObjectName: 'Contact' })
+                                        .then(resMap => {
+                                            let columns = [];
+                                            columns.push({
+                                                label: 'Select', fieldName: 'Select', type: 'button', typeAttributes: {
+                                                    label: 'Select',
+                                                    name: 'Select',
+                                                    title: 'Select',
+                                                    disabled: false,
+                                                    value: 'Select',
+                                                    variant: ''
+                                                }
+                                            });
+                                            for (const [key, value] of Object.entries(resMap)) {
+                                                columns.push({
+                                                    label: key, fieldName: value
+                                                });
+                                            }
+                                            this.columns = [...columns];
+                                        })
+                                    this.isCurrentComponent = true;
+                                    this.isTableVisible = true;
+                                    this.isCreateContactVisible = false;
+                                    this.exContResult = exContResult;
+                                } else {
+                                    this.isCurrentComponent = true;
+                                    this.isTableVisible = false;
+                                    this.isCreateContactVisible = true;
+                                }
+                            })
+                            .catch(error => {
+                                this.error = error;
+                            });
+                    })
             })
-        })
-        .catch(error => {
-            this.error = error;
-        });
+            .catch(error => {
+                this.error = error;
+            });
     }
     handleChange(event) {
         let variableName = event.target.title;
@@ -112,47 +143,50 @@ export default class StorybankSubmissionConversionStoryteller extends Navigation
         createContact({
             contact: this.contact
         })
-        .then(result => {
-            this.createdContact = result;
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Success',
-                    message: 'Contact successfully created!',
-                    variant: 'success',
-                }),
-            );
-            if (this.nominatorOrgName != '') {
-                this.isCurrentComponent = false;
-                this.isCreateOrganizationPage = true;
-            } else if (this.nominatorEmail != '') {
-                this.isCurrentComponent = false;
-                this.isCreateNominatorPage = true;
-            } else {
-                createNewStoryApproved({
-                    currentStorybankSubmittedId: this.recordId,
-                    contactId: this.createdContact.Id,
-                    nominatorId: null,
-                    organizationId: null
-                })
-                    .then(resultId => {
-                        this.redirectId = resultId;
-                        this.navigateToObjectRecord();
-                    }).catch((error) => {
-                        this.error = error;
+            .then(result => {
+                this.createdContact = result;
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Success',
+                        message: 'Contact successfully created!',
+                        variant: 'success',
+                    }),
+                );
+                if (this.nominatorOrgName != '') {
+                    this.isCurrentComponent = false;
+                    this.isCreateOrganizationPage = true;
+                } else if (this.nominatorEmail != '') {
+                    this.isCurrentComponent = false;
+                    this.isCreateNominatorPage = true;
+                } else {
+                    createNewStoryApproved({
+                        currentStorybankSubmittedId: this.recordId,
+                        contactId: this.createdContact.Id,
+                        nominatorId: null,
+                        organizationId: null
                     })
-            }
-        })
+                        .then(resultId => {
+                            this.redirectId = resultId;
+                            this.navigateToObjectRecord();
+                        }).catch((error) => {
+                            this.error = error;
+                        })
+                }
+            })
     }
     changeBoolean() {
         this.isTableVisible = false;
         this.isCreateContactVisible = true;
     }
-    onSelectClick(event) {
-        let variableName = event.target.name;
-        this.selectedContactId = variableName;
-        this.isTableVisible = false;
-        this.isCreateContactVisible = false;
-        this.isCurrentComponent = false;
-        this.isUpdatePageComponent = true;
+    rowAction(event) {
+        var recId = event.detail.row.Id;
+        var name = event.detail.action.name;
+        if (name === 'Select') {
+            this.selectedContactId = recId;
+            this.isTableVisible = false;
+            this.isCreateContactVisible = false;
+            this.isCurrentComponent = false;
+            this.isUpdatePageComponent = true;
+        }
     }
 }

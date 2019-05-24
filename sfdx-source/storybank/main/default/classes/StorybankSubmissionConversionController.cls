@@ -30,16 +30,24 @@ public List<StorybankContactUpdates> contactFieldUpdates {get;set;}
 //variable by using the getRecord method from the standard controller.
     
 public StorybankSubmissionConversionController (ApexPages.StandardController stdController) {
-    storytellerFieldmap = StorybankFieldsStoryteller__c.getAll();      
-    nominatorFieldmap = StorybankFieldsNominator__c.getAll(); 
-    nominatorOrgFieldmap = Storybank_Fields_Nominator_Org__c.getall();
+    System.debug('bshowsubmitter '+bshowsubmitter);
     
+    System.debug('StorybankSubmissionConversionController');
+    System.debug('Storybank_Submitted__c: '+ws);
+    storytellerFieldmap = StorybankFieldsStoryteller__c.getAll(); 
+    System.debug('storytellerFieldmap: '+storytellerFieldmap);     
+    nominatorFieldmap = StorybankFieldsNominator__c.getAll(); 
+    System.debug('nominatorFieldmap: '+nominatorFieldmap);
+    nominatorOrgFieldmap = Storybank_Fields_Nominator_Org__c.getall();
+    System.debug('nominatorOrgFieldmap: '+nominatorOrgFieldmap);
+
     List<String> sFields = new List<String> ();
     
     sFields.addall(StorybankUtilities.getNominatorOrgSubmittedFields(Storybank_Fields_Nominator_Org__c.getall().values()));    
     sFields.addall(StorybankUtilities.getSubmittedFields(storybank__Storybank_Map_Submitted_Approved__c.getall().values()));    
     sFields.addall(StorybankUtilities.getNominatorContactSubmittedFields(StorybankFieldsNominator__c.getall().values()));
     sFields.addall(StorybankUtilities.getStorytellerSubmittedFields(StorybankFieldsStoryteller__c.getall().values()));
+    
     
     //Fails in Test Context
     if (!test.IsRunningTest()) {
@@ -71,6 +79,7 @@ public StorybankSubmissionConversionController (ApexPages.StandardController std
 }
     
 public void createnewstorytellercontact () {
+    System.debug('createnewstorytellercontact');
     bshownewcontact = TRUE;
     cons.clear();
  
@@ -93,6 +102,7 @@ public void createnewstorytellercontact () {
 }
     
 public void createnewnominatorcontact () {
+    System.debug('createnewnominatorcontact');
     bshownewcontact = TRUE;
     cons.clear();
     
@@ -132,6 +142,7 @@ public pagereference submitnewnominatorcontact () {
     
 public pagereference createStoryTellerRecord() {
     try {
+        System.debug('createStoryTellerRecord');
     
         //for updates, process field updates
         if (contactFieldUpdates != null) {//existing contact selected  
@@ -170,6 +181,7 @@ public pagereference createNominatorRecord() {
 
 
 public pagereference submitnewaccount () {
+    System.debug('submitnewaccount');
     
     try {
         insert na;
@@ -251,6 +263,7 @@ public PageReference setSelectedNominator(){
 }
     
 public PageReference setSelectedAccount(){
+    System.debug('setSelectedAccount');
     //to ensure selection is unique, check if in unique set
     if (ApexPages.currentPage().getParameters().get('aid') != null) {
         rs.Nominating_Organization__c = ApexPages.currentPage().getParameters().get('aid');
@@ -263,7 +276,7 @@ public PageReference setSelectedAccount(){
 
    
 private pagereference NominatorCheck () {
-   
+   System.debug('NominatorCheck');
     if (ws.Nominator_Organization__c != null) {//go to select an org page
         accts = contactSearch.namesearch(ws.Nominator_Organization__c);
             
@@ -279,7 +292,7 @@ private pagereference NominatorCheck () {
 }
 
  private pagereference NominatorContactCheck () {
-   
+    System.debug('NominatNominatorContactCheckorCheck');
     if (ws.Nominator_Email_Address__c != null) {//go to select an org page
         Cons = contactSearch.emailsearchNominator(ws.Nominator_Email_Address__c);
             
@@ -301,7 +314,7 @@ private pagereference NominatorCheck () {
 } 
    
 private void createreviewedsubmission() {
-   
+   System.debug('createreviewedsubmission');
     Id rtypeId;
 
     if (storymap.containskey(ws.RecordTypeId) ) {
@@ -316,6 +329,7 @@ private void createreviewedsubmission() {
 }
 
 public pagereference convertsubmission () {
+    System.debug('convertsubmission');
 
     rs.Name = ws.Storybank_Name__c;
     if (rs.Name == null) {

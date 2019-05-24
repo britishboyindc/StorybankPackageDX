@@ -12,62 +12,13 @@
                 <h3 class="slds-section-title--divider">Create New Storyteller Record</h3>
                 <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
                     <lightning-record-edit-form object-api-name="Contact">
-                        <div class="slds-grid slds-gutters">
-                            <div class="slds-col">
-                                <lightning-input-field field-name="FirstName" onchange={handleChange}
-                                    title="contact-FirstName" value={contact.FirstName}>
-                                </lightning-input-field>
-                                <lightning-input-field field-name="Email" onchange={handleChange} title="contact-Email"
-                                    value={contact.Email}>
-                                </lightning-input-field>
-                                <lightning-input-field field-name="MailingStreet" onchange={handleChange}
-                                    title="contact-MailingStreet" value={contact.MailingStreet}>
-                                </lightning-input-field>
-                                <lightning-input-field field-name="MailingState" onchange={handleChange}
-                                    title="contact-MailingState" value={contact.MailingState}>
-                                </lightning-input-field>
-                                <lightning-input-field field-name="storybank__Age_Range__c" onchange={handleChange}
-                                    title="contact-storybank__Age_Range__c" value={contact.storybank__Age_Range__c}>
-                                </lightning-input-field>
-                                <lightning-input-field field-name="storybank__Ethnicity__c" onchange={handleChange}
-                                    title="contact-storybank__Ethnicity__c" value={contact.storybank__Ethnicity__c}>
-                                </lightning-input-field>
-                                <lightning-input-field field-name="storybank__Sexual_Orientation__c"
-                                    onchange={handleChange} title="contact-storybank__Sexual_Orientation__c"
-                                    value={contact.storybank__Sexual_Orientation__c}>
-                                </lightning-input-field>
-                            </div>
-                            <div class="slds-col">
-                                <lightning-input-field field-name="LastName" onchange={handleChange}
-                                    title="contact-LastName" value={contact.LastName}>
-                                </lightning-input-field>
-                                <lightning-input-field field-name="Phone" onchange={handleChange} title="contact-Phone"
-                                    value={contact.Phone}>
-                                </lightning-input-field>
-                                <div style="height: 5.8rem">
-                                    <lightning-input-field field-name="MailingCity" onchange={handleChange}
-                                        title="contact-MailingCity" value={contact.MailingCity}>
-                                    </lightning-input-field>
-                                </div>
-                                <lightning-input-field field-name="MailingPostalCode" onchange={handleChange}
-                                    title="contact-MailingPostalCode" value={contact.MailingPostalCode}>
-                                </lightning-input-field>
-                                <div style="height: 4rem">
-                                    <lightning-input-field field-name="storybank__Disability__c" onchange={handleChange}
-                                        title="contact-storybank__Disability__c"
-                                        value={contact.storybank__Disability__c}>
-                                    </lightning-input-field>
-                                </div>
-                                <lightning-input-field field-name="storybank__Gender__c" onchange={handleChange}
-                                    title="contact-storybank__Gender__c" value={contact.storybank__Gender__c}>
-                                </lightning-input-field>
-                                <div style="height: 4rem">
-                                    <lightning-input-field field-name="storybank__Veteran__c" onchange={handleChange}
-                                        title="contact-storybank__Veteran__c" value={contact.storybank__Veteran__c}>
-                                    </lightning-input-field>
-                                </div>
-                            </div>
-                        </div>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="6" padding="around-small" for:each={contactWrapper}
+                                for:item="item" key={key}>
+                                <lightning-input-field field-name={item.fieldAPI} onchange={handleChange}
+                                    title={item.title} value={item.value}></lightning-input-field>
+                            </lightning-layout-item>
+                        </lightning-layout>
                     </lightning-record-edit-form>
                     <button class="slds-button slds-button_brand slds-align_absolute-center"
                         onclick={handleCreate}>Create
@@ -78,53 +29,9 @@
             <template if:true={isTableVisible}>
                 <h3 class="slds-section-title--divider">Potential Storyteller Matches</h3>
                 <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
-                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
-                        <thead>
-                            <tr class="slds-line-height_reset">
-                                <th class="" scope="col">
-                                    <div class="slds-truncate" title="Opportunity Name">Select</div>
-                                </th>
-                                <th class="" scope="col">
-                                    <div class="slds-truncate" title="Account Name">First Name</div>
-                                </th>
-                                <th class="" scope="col">
-                                    <div class="slds-truncate" title="Close Date">Last Name</div>
-                                </th>
-                                <th class="" scope="col">
-                                    <div class="slds-truncate" title="Stage">Email</div>
-                                </th>
-                                <th class="" scope="col">
-                                    <div class="slds-truncate" title="Confidence">Phone</div>
-                                </th>
-                                <th class="" scope="col">
-                                    <div class="slds-truncate" title="Amount">Mailing Zip/Postal Code</div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="slds-hint-parent" for:each={exContResult} for:item='row' key={id}>
-                                <th data-label="Opportunity Name" scope="row">
-                                    <div class="slds-truncate" title="Cloudhub"><a href="javascript:void(0);"
-                                            tabindex="-1" name={row.Id} onclick={onSelectClick}>Select</a></div>
-                                </th>
-                                <td data-label="First Name">
-                                    <div class="slds-truncate">{row.FirstName}</div>
-                                </td>
-                                <td data-label="Close Date">
-                                    <div class="slds-truncate">{row.LastName}</div>
-                                </td>
-                                <td data-label="Prospecting">
-                                    <div class="slds-truncate">{row.Email}</div>
-                                </td>
-                                <td data-label="Confidence">
-                                    <div class="slds-truncate">{row.Phone}</div>
-                                </td>
-                                <td data-label="Amount">
-                                    <div class="slds-truncate">{row.MailingPostalCode}</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <lightning-datatable class="datatable" key-field="Id" data={exContResult} columns={columns}
+                        hide-checkbox-column onrowaction={rowAction}>
+                    </lightning-datatable>
                     <button class="slds-button slds-button_brand slds-align_absolute-center" onclick={changeBoolean}
                         style="margin-top: 1rem;">Create New Contact</button>
                 </div>

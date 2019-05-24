@@ -17,6 +17,16 @@
         td.hide-label2 label.slds-form-element__label {
         display: none;
         }
+        .datatable button.slds-button.slds-button_neutral {
+        border: unset;
+        background: unset;
+        }
+        .datatable button.slds-button.slds-button_neutral:hover {
+        text-decoration: underline;
+        }
+        .datatable lightning-button-menu {
+        display: none;
+        }
     </aura:html>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     <aura:attribute name="recordId" type="Id" />

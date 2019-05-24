@@ -97,16 +97,16 @@ export default class StorybankSubmissionConversionStoryteller extends Navigation
                     Id: null,
                     nominatorOrgId: null
                 })
-                .then(redirectId => {
-                    this.redirectId = redirectId;
-                    this.dispatchEvent(
-                        new ShowToastEvent({
-                            title: 'Success!',
-                            variant: 'success',
-                        }),
-                    );
-                    this.navigateToObjectRecord();
-                });
+                    .then(redirectId => {
+                        this.redirectId = redirectId;
+                        this.dispatchEvent(
+                            new ShowToastEvent({
+                                title: 'Success!',
+                                variant: 'success',
+                            }),
+                        );
+                        this.navigateToObjectRecord();
+                    })
             }
         }
     }

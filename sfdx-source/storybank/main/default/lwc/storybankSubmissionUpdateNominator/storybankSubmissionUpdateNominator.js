@@ -17,29 +17,27 @@ export default class StorybankSubmissionConversionStoryteller extends Navigation
     contact;
     connectedCallback() {
         fillWrapper({ context: 'Nominator', submittedId: this.submittedrecid, contactId: this.nominatorid })
-        .then(wrapper => {
-            this.wrapper = wrapper;
-            this.copyWrapper = [...wrapper];
-        })
-        .catch(error => {
-            this.error = error;
-        });
-
+            .then(wrapper => {
+                this.wrapper = wrapper;
+                this.copyWrapper = [...wrapper];
+            })
+            .catch(error => {
+                this.error = error;
+            })
         getCurrentNominatorValues({
             Id: this.submittedrecid,
             context: 'nominatorUpdatePage'
         })
-        .then(currentNominatorValues => {
-            this.currentNominatorValues = Object.assign({}, currentNominatorValues);
-        });
-
+            .then(currentNominatorValues => {
+                this.currentNominatorValues = Object.assign({}, currentNominatorValues);
+            })
         getContact({
             field: 'Id',
             value: this.nominatorid
         })
-        .then(responseContact => {
-            this.contact = responseContact[0];
-        });
+            .then(responseContact => {
+                this.contact = responseContact[0];
+            })
     }
     onInputChange(event) {
         let changedValue = event.target.value;
@@ -93,6 +91,6 @@ export default class StorybankSubmissionConversionStoryteller extends Navigation
                 recordId: this.redirectId,
                 actionName: 'view',
             },
-        });
+        })
     }
 }

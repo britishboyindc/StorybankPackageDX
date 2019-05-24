@@ -6,6 +6,7 @@ import createAccount from '@salesforce/apex/lwcUtils.createAccount';
 import createNewStoryApproved from '@salesforce/apex/lwcUtils.createNewStoryApproved';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getMatches from '@salesforce/apex/lwcUtils.getMatches';
 
 export default class StorybankSubmissionConversionNomOrg extends NavigationMixin(LightningElement) {
     @api nominatoremail;
@@ -21,17 +22,39 @@ export default class StorybankSubmissionConversionNomOrg extends NavigationMixin
     @track isCreateNominatorPage = false;
     @track nominatororgid = '';
     storyApprovedId = '';
+    @track columns = [];
+    @track currentOrgWrapper = [];
     connectedCallback() {
         fieldsForConversionMethod({ context: 'nominatorOrg' })
-        .then(fieldsForConversion => {
-            this.fieldsForConversion = fieldsForConversion;
-            this.isCurrentComponent = true;
-        });
+            .then(fieldsForConversion => {
+                this.fieldsForConversion = fieldsForConversion;
+                this.isCurrentComponent = true;
+            })
         getAccount({
             name: this.nominatororgname
         })
             .then(existedAccs => {
                 if (existedAccs.length != 0) {
+                    getMatches({ fieldSetName: 'storybank__Storybank_Nominating_Organization', ObjectName: 'Account' })
+                        .then(resMap => {
+                            let columns = [];
+                            columns.push({
+                                label: 'Select', fieldName: 'Select', type: 'button', typeAttributes: {
+                                    label: 'Select',
+                                    name: 'Select',
+                                    title: 'Select',
+                                    disabled: false,
+                                    value: 'Select',
+                                    variant: ''
+                                }
+                            });
+                            for (const [key, value] of Object.entries(resMap)) {
+                                columns.push({
+                                    label: key, fieldName: value
+                                });
+                            }
+                            this.columns = [...columns];
+                        })
                     this.isTableVisible = true;
                     this.isCreateOrgVisible = false;
                     this.existedOrganizations = existedAccs;
@@ -44,9 +67,18 @@ export default class StorybankSubmissionConversionNomOrg extends NavigationMixin
             Id: this.submittedrecid,
             context: 'nominatorOrganization'
         })
-        .then(currentOrg => {
-            this.currentOrg = Object.assign({}, currentOrg);
-        })
+            .then(currentOrg => {
+                this.currentOrg = Object.assign({}, currentOrg);
+                let currentOrgWrapper = [];
+                for (const [key, val] of Object.entries(currentOrg)) {
+                    currentOrgWrapper.push({
+                        fieldAPI: key,
+                        value: val,
+                        title: 'currentOrg-' + key
+                    });
+                }
+                this.currentOrgWrapper = [...currentOrgWrapper];
+            })
     }
     handleChange(event) {
         let variableName = event.target.title;
@@ -60,18 +92,18 @@ export default class StorybankSubmissionConversionNomOrg extends NavigationMixin
         createAccount({
             account: this.currentOrg
         })
-        .then(result => {
-            this.createdOrganization = result;
-            this.nominatororgid = result.Id;
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Success',
-                    message: 'Account successfully created!',
-                    variant: 'success',
-                }),
-            );
-            this.navigateToComponentOrCreateStoryApproved();
-        });
+            .then(result => {
+                this.createdOrganization = result;
+                this.nominatororgid = result.Id;
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Success',
+                        message: 'Account successfully created!',
+                        variant: 'success',
+                    }),
+                );
+                this.navigateToComponentOrCreateStoryApproved();
+            })
     }
     navigateToComponentOrCreateStoryApproved() {
         if (this.nominatoremail != '') {
@@ -84,12 +116,12 @@ export default class StorybankSubmissionConversionNomOrg extends NavigationMixin
                 nominatorId: null,
                 organizationId: this.nominatororgid
             })
-            .then(res => {
-                this.storyApprovedId = res;
-                this.navigateToObjectRecord();
-            }).catch((error) => {
-                this.error = error;
-            });
+                .then(res => {
+                    this.storyApprovedId = res;
+                    this.navigateToObjectRecord();
+                }).catch((error) => {
+                    this.error = error;
+                })
         }
     }
     navigateToObjectRecord() {
@@ -101,9 +133,13 @@ export default class StorybankSubmissionConversionNomOrg extends NavigationMixin
             },
         })
     }
-    onSelectClick(event) {
-        this.nominatororgid = event.target.name;
-        this.navigateToComponentOrCreateStoryApproved();
+    rowAction(event) {
+        var name = event.detail.action.name;
+        this.nominatororgid = event.detail.row.Id;
+        if (name === 'Select') {
+            this.nominatororgid = event.detail.row.Id;
+            this.navigateToComponentOrCreateStoryApproved();
+        }
     }
     changeBoolean() {
         this.isTableVisible = false;

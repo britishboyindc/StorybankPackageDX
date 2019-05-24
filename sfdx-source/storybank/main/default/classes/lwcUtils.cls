@@ -293,4 +293,16 @@ public with sharing class lwcUtils {
         List<Account> accs = Database.query(query);
         return accs;
     }
+     @AuraEnabled
+     public static Map<String, String> getMatches(String fieldSetName, String ObjectName){
+        Map<String, Schema.SObjectType> GlobalDescribeMap = Schema.getGlobalDescribe(); 
+        Schema.SObjectType SObjectTypeObj = GlobalDescribeMap.get(ObjectName);
+        Schema.DescribeSObjectResult DescribeSObjectResultObj = SObjectTypeObj.getDescribe();
+        Schema.FieldSet fieldSetObj = DescribeSObjectResultObj.FieldSets.getMap().get(fieldSetName);
+        Map<String, String> m = new Map<String,String>();
+        for(Schema.FieldSetMember s : fieldSetObj.getFields()){
+           m.put(s.getLabel(), s.getFieldPath());
+        }
+        return m;
+     }
 }

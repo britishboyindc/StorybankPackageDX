@@ -114,15 +114,28 @@ public with sharing class TEST_lwcUtils {
     }
     @IsTest
     static void fieldsForConversionTEST() {
+        Schema.FieldSet fs1;
         List<String> nominatorfieldsForConversion = lwcUtils.fieldsForConversion('nominator');
-        String ns = String.join(nominatorfieldsForConversion, ', ');
-        System.assertEquals(ns, 'storybank__Nominator_First__c, storybank__Nominator_Organization__c, storybank__Nominator_Last_Name__c, storybank__Nominator_Address__c, storybank__Nominator_Email_Address__c, storybank__Nominator_City__c, storybank__Nominator_Phone__c, storybank__Nominator_State_pick__c, storybank__Nominator_Postal_Code__c');
+        fs1 = Schema.SObjectType.Storybank_Submitted__c.fieldSets.Nominator_Fields_for_Conversion;
+        List<String> fields = new List<String>();
+        for (Schema.FieldSetMember s : fs1.getFields()) {
+            fields.add(s.getFieldPath());
+        }
+        System.assertEquals(fields, nominatorfieldsForConversion);
         List<String> storytellerfieldsForConversion = lwcUtils.fieldsForConversion('storyteller');
-        String ss = String.join(storytellerfieldsForConversion, ', ');
-        System.assertEquals(ss, 'storybank__First_Name__c, storybank__Street_Address__c, storybank__Last_Name__c, storybank__City__c, storybank__Email_Address__c, storybank__State_pick__c, storybank__Phone__c, storybank__Postal_Code__c');
+        fs1 = Schema.SObjectType.Storybank_Submitted__c.fieldSets.Submitted_Storyteller_Information;
+        fields.clear();
+        for (Schema.FieldSetMember s : fs1.getFields()) {
+            fields.add(s.getFieldPath());
+        }
+        System.assertEquals(fields, storytellerfieldsForConversion);
         List<String> nomOrgFieldsForConversion = lwcUtils.fieldsForConversion('nominatorOrg');
-        String os = String.join(nomOrgFieldsForConversion, ', ');
-        System.assertEquals(os, 'storybank__Nominator_Organization__c, storybank__Nominator_Phone__c, storybank__Nominator_City__c, storybank__Nominator_State_pick__c, storybank__Nominator_Postal_Code__c');
+        fs1 = Schema.SObjectType.Storybank_Submitted__c.fieldSets.Nominator_Org_Fields_for_Submission;
+        fields.clear();
+        for (Schema.FieldSetMember s : fs1.getFields()) {
+            fields.add(s.getFieldPath());
+        }
+        System.assertEquals(fields, nomOrgFieldsForConversion);
     }
     @IsTest
     static void getCurrentNominatorValuesTEST() {
@@ -191,4 +204,13 @@ public with sharing class TEST_lwcUtils {
         System.assertEquals(accs.isEmpty(), false);
         System.assertEquals(accs[0].Name, 'NAME');
     }
+    @IsTest
+    static void getMatchesTEST(){
+        Map<String, String> m =lwcUtils.getMatches('storybank__Storybank_Matches', 'Contact');
+		Map<String, String> m2 = new Map<String,String>();
+        for(Schema.FieldSetMember s : Schema.SObjectType.Contact.fieldSets.Storybank_Matches.getFields()){
+            m2.put(s.getLabel(), s.getFieldPath());
+        }
+        System.assertEquals(m, m2);      
+    }    
 }
