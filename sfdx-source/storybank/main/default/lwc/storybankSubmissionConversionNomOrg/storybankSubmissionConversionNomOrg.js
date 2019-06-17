@@ -2,7 +2,6 @@ import { LightningElement, wire, track, api } from 'lwc';
 import fieldsForConversionMethod from '@salesforce/apex/lwcUtils.fieldsForConversion';
 import getAccount from '@salesforce/apex/lwcUtils.getAccount';
 import getCurrentNominatorValues from '@salesforce/apex/lwcUtils.getCurrentNominatorValues';
-import createAccount from '@salesforce/apex/lwcUtils.createAccount';
 import createNewStoryApproved from '@salesforce/apex/lwcUtils.createNewStoryApproved';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -88,22 +87,16 @@ export default class StorybankSubmissionConversionNomOrg extends NavigationMixin
             this[fields[0]][fields[1]] = typedValue;
         }
     }
-    handleCreate() {
-        createAccount({
-            account: this.currentOrg
-        })
-            .then(result => {
-                this.createdOrganization = result;
-                this.nominatororgid = result.Id;
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success',
-                        message: 'Account successfully created!',
-                        variant: 'success',
-                    }),
-                );
-                this.navigateToComponentOrCreateStoryApproved();
-            })
+    handleSuccess(event) {
+        this.nominatororgid = event.detail.id;
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: 'Account successfully created!',
+                variant: 'success',
+            }),
+        );
+        this.navigateToComponentOrCreateStoryApproved();
     }
     navigateToComponentOrCreateStoryApproved() {
         if (this.nominatoremail != '') {

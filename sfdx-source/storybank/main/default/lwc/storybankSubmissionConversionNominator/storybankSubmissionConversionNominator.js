@@ -2,7 +2,6 @@ import { LightningElement, wire, track, api } from 'lwc';
 import fieldsForConversionMethod from '@salesforce/apex/lwcUtils.fieldsForConversion';
 import getContact from '@salesforce/apex/lwcUtils.getContact';
 import getCurrentNominatorValues from '@salesforce/apex/lwcUtils.getCurrentNominatorValues';
-import createContact from '@salesforce/apex/lwcUtils.createContact';
 import createNewStoryApproved from '@salesforce/apex/lwcUtils.createNewStoryApproved';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -87,31 +86,26 @@ export default class StorybankSubmissionConversionStoryteller extends Navigation
             this[fields[0]][fields[1]] = typedValue;
         }
     }
-    handleCreate() {
-        createContact({
-            contact: this.currentNominator
+    handleSuccess(event) {
+        this.createdNominator = { Id: event.detail.id };
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: 'Contact successfully created!',
+                variant: 'success',
+            }),
+        );
+        createNewStoryApproved({
+            currentStorybankSubmittedId: this.submittedrecid,
+            contactId: this.storytellerid,
+            nominatorId: this.createdNominator.Id,
+            organizationId: this.nominatororgid
         })
-            .then(result => {
-                this.createdNominator = result;
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success',
-                        message: 'Contact successfully created!',
-                        variant: 'success',
-                    }),
-                );
-                createNewStoryApproved({
-                    currentStorybankSubmittedId: this.submittedrecid,
-                    contactId: this.storytellerid,
-                    nominatorId: this.createdNominator.Id,
-                    organizationId: this.nominatororgid
-                })
-                    .then(storyApprovedId => {
-                        this.storyApprovedId = storyApprovedId;
-                        this.navigateToObjectRecord();
-                    }).catch((error) => {
-                        this.error = error;
-                    })
+            .then(storyApprovedId => {
+                this.storyApprovedId = storyApprovedId;
+                this.navigateToObjectRecord();
+            }).catch((error) => {
+                this.error = error;
             })
     }
     navigateToObjectRecord() {

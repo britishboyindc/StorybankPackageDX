@@ -1,6 +1,5 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import createContact from '@salesforce/apex/lwcUtils.createContact';
 import fillWrapper from '@salesforce/apex/lwcUtils.fillWrapper';
 import getRecord from '@salesforce/apex/lwcUtils.getRecord';
 import getContact from '@salesforce/apex/lwcUtils.getContact';
@@ -139,40 +138,35 @@ export default class StorybankSubmissionConversionStoryteller extends Navigation
             this[fields[0]][fields[1]] = typedValue;
         }
     }
-    handleCreate() {
-        createContact({
-            contact: this.contact
-        })
-            .then(result => {
-                this.createdContact = result;
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success',
-                        message: 'Contact successfully created!',
-                        variant: 'success',
-                    }),
-                );
-                if (this.nominatorOrgName != '') {
-                    this.isCurrentComponent = false;
-                    this.isCreateOrganizationPage = true;
-                } else if (this.nominatorEmail != '') {
-                    this.isCurrentComponent = false;
-                    this.isCreateNominatorPage = true;
-                } else {
-                    createNewStoryApproved({
-                        currentStorybankSubmittedId: this.recordId,
-                        contactId: this.createdContact.Id,
-                        nominatorId: null,
-                        organizationId: null
-                    })
-                        .then(resultId => {
-                            this.redirectId = resultId;
-                            this.navigateToObjectRecord();
-                        }).catch((error) => {
-                            this.error = error;
-                        })
-                }
+    handleSuccess(event) {
+        this.createdContact = { Id: event.detail.id };
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: 'Contact successfully created!',
+                variant: 'success',
+            }),
+        );
+        if (this.nominatorOrgName != '') {
+            this.isCurrentComponent = false;
+            this.isCreateOrganizationPage = true;
+        } else if (this.nominatorEmail != '') {
+            this.isCurrentComponent = false;
+            this.isCreateNominatorPage = true;
+        } else {
+            createNewStoryApproved({
+                currentStorybankSubmittedId: this.recordId,
+                contactId: this.createdContact.Id,
+                nominatorId: null,
+                organizationId: null
             })
+                .then(resultId => {
+                    this.redirectId = resultId;
+                    this.navigateToObjectRecord();
+                }).catch((error) => {
+                    this.error = error;
+                })
+        }
     }
     changeBoolean() {
         this.isTableVisible = false;

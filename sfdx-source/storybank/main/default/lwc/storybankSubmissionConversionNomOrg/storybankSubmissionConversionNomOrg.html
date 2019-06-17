@@ -11,7 +11,9 @@
       <template if:true={isCreateOrgVisible}>
         <h3 class="slds-section-title--divider">Create New Organization Record</h3>
         <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
-          <lightning-record-edit-form object-api-name="Account">
+          <lightning-record-edit-form object-api-name="Account" onsuccess={handleSuccess}>
+            <lightning-messages>
+            </lightning-messages>
             <lightning-layout multiple-rows>
               <lightning-layout-item size="6" padding="around-small" for:each={currentOrgWrapper} for:item="item"
                 key={key}>
@@ -19,10 +21,10 @@
                   value={item.value}></lightning-input-field>
               </lightning-layout-item>
             </lightning-layout>
+            <lightning-button class="slds-align_absolute-center" variant="brand" type="submit" name="save"
+              label="Create Account and Continue">
+            </lightning-button>
           </lightning-record-edit-form>
-          <button class="slds-button slds-button_brand slds-align_absolute-center" onclick={handleCreate}>Create Account
-            and
-            Continue</button>
         </div>
       </template>
 
